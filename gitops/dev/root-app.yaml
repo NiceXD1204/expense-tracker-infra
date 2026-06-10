@@ -1,0 +1,26 @@
+# "App of apps" - point ArgoCD at this single Application once (manually, see infra README),
+# and it will create/manage the backend and frontend Applications below from this directory.
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: expense-tracker-dev
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/NiceXD1204/expense-tracker-infra.git
+    targetRevision: HEAD
+    path: gitops/dev
+    directory:
+      include: "{backend-app.yaml,frontend-app.yaml,db-app.yaml}"
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argocd
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

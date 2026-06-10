@@ -1,0 +1,30 @@
+# Multi-source Application: chart comes from the app repo, env-specific values
+# come from this infra repo. CI updates values-backend.yaml's image.tag on each
+# push to master, and ArgoCD auto-syncs the change.
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: expense-tracker-backend-dev
+  namespace: argocd
+spec:
+  project: default
+  sources:
+    - repoURL: https://github.com/NiceXD1204/expense-tracker.git
+      targetRevision: HEAD
+      path: charts/backend
+      helm:
+        releaseName: expense-tracker-backend
+        valueFiles:
+          - $values/gitops/dev/values-backend.yaml
+    - repoURL: https://github.com/NiceXD1204/expense-tracker-infra.git
+      targetRevision: HEAD
+      ref: values
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: expense-tracker
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

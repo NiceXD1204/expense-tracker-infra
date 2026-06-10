@@ -1,0 +1,27 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: expense-tracker-frontend-dev
+  namespace: argocd
+spec:
+  project: default
+  sources:
+    - repoURL: https://github.com/NiceXD1204/expense-tracker.git
+      targetRevision: HEAD
+      path: charts/frontend
+      helm:
+        releaseName: expense-tracker-frontend
+        valueFiles:
+          - $values/gitops/dev/values-frontend.yaml
+    - repoURL: https://github.com/NiceXD1204/expense-tracker-infra.git
+      targetRevision: HEAD
+      ref: values
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: expense-tracker
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

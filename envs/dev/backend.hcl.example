@@ -1,0 +1,9 @@
+# Copy to backend.hcl (gitignored) using the values from `terraform output backend_config_hcl`
+# in the bootstrap/ module, then run:
+#   terraform init -backend-config=backend.hcl
+
+bucket         = "expense-tracker-tfstate-<account-id>"
+key            = "envs/dev/terraform.tfstate"
+region         = "eu-central-1"
+dynamodb_table = "expense-tracker-tf-locks"
+encrypt        = true

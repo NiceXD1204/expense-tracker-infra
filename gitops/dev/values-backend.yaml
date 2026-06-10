@@ -1,0 +1,25 @@
+# Dev environment overrides for charts/backend (in the expense-tracker app repo).
+# image.tag is updated automatically by the deploy-staging GitHub Actions workflow.
+image:
+  repository: 024249678351.dkr.ecr.eu-central-1.amazonaws.com/expense-tracker-backend
+  tag: latest
+
+env:
+  DATABASE_URL: postgresql://expenses:expenses@expense-tracker-db-postgresql.expense-tracker.svc.cluster.local:5432/expenses
+
+ingress:
+  enabled: true
+  className: nginx
+  host: api.expense-tracker.local
+  path: /
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    cpu: 250m
+    memory: 256Mi
+
+metrics:
+  enabled: true

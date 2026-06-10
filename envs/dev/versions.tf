@@ -1,0 +1,26 @@
+terraform {
+  required_version = ">= 1.6"
+
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.0"
+    }
+    kubernetes = {
+      source  = "hashicorp/kubernetes"
+      version = "~> 2.30"
+    }
+    helm = {
+      source  = "hashicorp/helm"
+      version = "~> 2.13"
+    }
+  }
+
+  # Configure with: terraform init -backend-config=backend.hcl
+  # (backend.hcl is generated from the `bootstrap` module's output and is gitignored)
+  backend "s3" {}
+}
+
+provider "aws" {
+  region = var.region
+}

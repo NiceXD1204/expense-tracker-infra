@@ -1,0 +1,16 @@
+# Dev environment overrides for charts/db (thin wrapper around the Bitnami postgresql chart).
+postgresql:
+  auth:
+    username: expenses
+    password: expenses
+    database: expenses
+  primary:
+    persistence:
+      size: 1Gi
+    resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
+      limits:
+        cpu: 250m
+        memory: 256Mi
